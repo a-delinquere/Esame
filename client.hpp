@@ -1,0 +1,27 @@
+#ifndef CLIENTE_HPP_
+#define CLIENTE_HPP_
+
+#include <iostream>
+#include <string>
+
+#include "filedb.hpp"
+#include "baccount.hpp"
+
+using namespace std;
+
+class Client
+{
+friend class BAccount;
+public:
+	Client(string*,string*,string*);
+	bool c_loginTest(string*);
+	string c_getName();
+	string c_getSurname();
+	string c_getPassword();
+private:
+	string name;
+	string surname;
+	string password;
+};
+
+#endif
