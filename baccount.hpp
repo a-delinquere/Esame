@@ -2,7 +2,8 @@
 #define BANKACCOUNT_H_
 
 #include <iostream>
-#include <string>
+#include <cstring>
+#include <sstream>
 #include <ctime>
 
 #include "trans.hpp"
@@ -19,6 +20,11 @@ public:
 	string** b_transaction(); //movimenti
 	string** b_ltransaction(int*,int*,int*,int*,int*,int*); //movimenti intervallo
 	void b_telRecharge(string*,string*); //ricarica telefonica
+
+private:
+	void b_splitDate(int,int*,int*,int*);
+	int b_dayCount(int*,int*,int*,int*,int*,int*);
+	string** add(int,string**);
 
 private:
 	Client* client;

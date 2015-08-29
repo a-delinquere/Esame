@@ -77,24 +77,25 @@ string** BAccount::b_transaction()
 
 string** BAccount::b_ltransaction(int* sdd,int* smm,int* syy,int* edd,int* emm,int* eyy)
 {
-	int n = this->t_dim() - 10;
 	string** t = 0;
-	if (n < 0)
-	{
-		n=0;
-		t = new string*[this->t_dim()];
-	}else{
-		t = new string*[10];
-	}
-	for (int i = 0;n < this->t_dim();i++)
-	{
-		t[i] = new string[3];
-		t[i][0] = this->t_date(n);
-		t[i][1] = this->t_amount(n);
-		t[i][2] = this->t_causal(n);
-		n++;
-	}
+	int dd,mm,yy,n = 0;
+	int daytoend = b_dayCount(sdd,smm,syy,edd,emm,eyy);
 	
+	
+	
+	for (int i = 0;i < this->t_dim();i++)
+	{
+		b_splitDate(i,&dd,&mm,&yy);
+		int daytoday = b_dayCount(sdd,smm,syy,&dd,&mm,&yy);
+		if (daytoday <= daytoend && 0 < daytoday)
+		{
+			t = add(i,t);
+			t[i] = new string[3];
+			t[i][0] = this->t_date(n);
+			t[i][1] = this->t_amount(n);
+			t[i][2] = this->t_causal(n);
+		}
+	}
 	return t;
 }
 
@@ -132,4 +133,59 @@ void  BAccount::b_telRecharge(string* bankName,string* bancomat)
 		cout << "La ricarica non può superare il deposito" << endl;
 		cout << "e l'importo deve essere maggiore di 0." << endl;
 	}
+}
+
+void BAccount::b_splitDate(int i,int* gg,int* mm,int* aa)
+{
+	*gg = *mm = *aa = 0;
+	
+	string sgg,smm,saa;
+	stringstream date(this->t_date(i));
+	getline(date,sgg,'/');
+	getline(date,smm,'/');
+	getline(date,saa,'\0');
+	
+	stringstream converter;
+	converter << sgg;
+	converter >> *gg;
+	
+	converter.clear();
+	converter << smm;
+	converter >> *mm;
+	
+	converter.clear();
+	converter << saa;
+	converter >> *aa;
+}
+
+int BAccount::b_dayCount(int* igg,int* imm,int* iaa,int* gg,int* mm,int* aa)
+{
+	int day = 0;
+	
+	struct tm da = {0,0,0,*igg,*imm-1,*iaa-1900};
+	struct tm a = {0,0,0,*gg,*mm-1,*aa-1900};
+	
+	time_t x = mktime(&da);
+	time_t y = mktime(&a);
+	
+	day = difftime(y,x)/(60*60*24);
+	
+	return day;
+}
+
+string** BAccount::add(int n,string** oldarray)
+{
+	string** newarray = new string*[n];
+	for (int i = 0;i < n-1; i++)
+	{
+		newarray[i] = new string[3];
+	}
+	memcpy(newarray,oldarray,(n-1)*3*sizeof(string));
+	
+	for (int i = 0;i < n; i++)
+	{
+		cout << newarray[i][0] << endl;
+	}
+	
+	return newarray;
 }

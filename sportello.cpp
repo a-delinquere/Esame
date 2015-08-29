@@ -50,12 +50,15 @@ void Sportello::s_functions(BAccount* ba)
 			break;
 		case 2:
 		{
+			string** t;
 			int sday,eday,smonth,emonth,syear,eyear;
 			cout << "da: ";
 			cin >> sday >> smonth >> syear;
 			cout << "a: ";
 			cin >> eday >> emonth >> eyear;
-			ba->b_ltransaction(&sday,&smonth,&syear,&eday,&emonth,&eyear);
+			t = ba->b_ltransaction(&sday,&smonth,&syear,&eday,&emonth,&eyear);
+			//int n = 14;
+			//s_printTransactions(&n,t);
 		}
 			break;
 		case 3:
@@ -65,10 +68,6 @@ void Sportello::s_functions(BAccount* ba)
 		}
 			break;
 	}
-	//string** v = 0;
-	//int l;
-	//v = fdb->fdb_query(&l,&cc);
-	//array2D(v);
 }
 
 
