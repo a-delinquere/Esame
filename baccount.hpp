@@ -17,14 +17,14 @@ class BAccount: private Trans
 public:
 	BAccount(Client*,string*);
 	void b_whitdraval(string*,string*); //prelievo
-	string** b_transaction(); //movimenti
-	string** b_ltransaction(int*,int*,int*,int*,int*,int*); //movimenti intervallo
+	string** b_transaction(int*); //movimenti
+	string** b_transaction(int*,int*,int*,int*,int*,int*,int*); //movimenti intervallo
 	void b_telRecharge(string*,string*); //ricarica telefonica
 
 private:
 	void b_splitDate(int,int*,int*,int*);
 	int b_dayCount(int*,int*,int*,int*,int*,int*);
-	string** add(int,string**);
+	string** b_append(int,string**);
 
 private:
 	Client* client;

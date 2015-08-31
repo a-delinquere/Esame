@@ -4,14 +4,14 @@ Sportello::Sportello(string* c,string* bn)
 {
 	code = *c;
 	bankname = *bn;
-	
+
 	string name,surname,password,cc;
 	/*cout << "inserire nome e cognome:\n";
 	cin >> name >> surname;
 	cout << "inserire password:\n";
 	cin >> password;*/
 	name = "raffaele";surname="mancino";password="password"; //comment for relese
-	
+
 	Client* client = new Client(&name,&surname,&password);
 	if (client->c_loginTest(&cc))
 	{
@@ -32,7 +32,7 @@ void Sportello::s_functions(BAccount* ba)
 	cout << "Per effettuare una ricarica telefonica digitare \"3\"," << endl;
 	cout << "Codice operazione: ";
 	cin >> ctrl;
-	
+
 	switch(ctrl)
 	{
 		case 0:
@@ -43,27 +43,27 @@ void Sportello::s_functions(BAccount* ba)
 		case 1:
 		{
 			string** t;
-			int n = 10;
-			t = ba->b_transaction();
+			int n;
+			t = ba->b_transaction(&n);
 			s_printTransactions(&n,t);
 		}
 			break;
 		case 2:
 		{
+			int n;
 			string** t;
 			int sday,eday,smonth,emonth,syear,eyear;
 			cout << "da: ";
 			cin >> sday >> smonth >> syear;
 			cout << "a: ";
 			cin >> eday >> emonth >> eyear;
-			t = ba->b_ltransaction(&sday,&smonth,&syear,&eday,&emonth,&eyear);
-			//int n = 14;
-			//s_printTransactions(&n,t);
+			t = ba->b_transaction(&n,&sday,&smonth,&syear,&eday,&emonth,&eyear);
+			s_printTransactions(&n,t);
 		}
 			break;
 		case 3:
 		{
-			
+
 			ba->b_telRecharge(&bankname,&code);
 		}
 			break;
