@@ -6,14 +6,15 @@ Trans::Trans(string* iban)
 	trans = fdb->fdb_query(&len,iban);
 }
 
-void Trans::t_update(string* cc,int dd,int mm,int aa,float* value,string* causal)
+void Trans::t_update(string* iban,int dd,int mm,int aa,float* value,string* causal)
 {
 	stringstream convert;
 	string txt;
 	convert << dd << "/" << mm << "/" << aa << " " << *value << " " << *causal;
 	txt = convert.str();
 	
-	fdb->fdb_write(cc,&txt);
+	fdb->fdb_write(iban,&txt);
+	trans = fdb->fdb_query(&len,iban);
 }
 
 void Trans::t_balance(float* balance)

@@ -31,7 +31,7 @@ string** FileDatabase::fdb_query(int* lines,string* cc_name)
 	path = "bank/"+*cc_name+".txt";
 	
 	db.open(path.c_str());
-	fdb_numOfLine(lines);
+	*lines = fdb_numOfLine();
 	
 	string** transaction= new string*[*lines];
 	
@@ -59,15 +59,17 @@ void FileDatabase::fdb_write(string* cc,string* txt)
 	db.close();
 }
 
-void FileDatabase::fdb_numOfLine(int* n)
+int FileDatabase::fdb_numOfLine()
 {
 	string t;
-	*n = 0;
+	int n = 0;
 	
 	while(getline(db,t))
 	{
-		*n += 1;
+		n++;
 	}
 	db.clear();
 	db.seekg(0);//rewind filestream
+	
+	return n;
 }

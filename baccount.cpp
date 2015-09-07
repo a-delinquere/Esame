@@ -46,6 +46,7 @@ void BAccount::b_whitdraval(string* bankName,string* bancomat)
 
 		amount *= -1;
 		this->t_update(&iban,now->tm_mday,now->tm_mon+1,now->tm_year+1900,&amount,&causal);
+		this->t_balance(&balance);
 	}else{
 		cout << "L'importo del prelievo non può superare il deposito" << endl;
 	}
@@ -134,6 +135,7 @@ void  BAccount::b_telRecharge(string* bankName,string* bancomat)
 		cout << "La ricarica non può superare il deposito" << endl;
 		cout << "e l'importo deve essere maggiore di 0." << endl;
 	}
+	this->t_balance(&balance);
 }
 
 void BAccount::b_splitDate(int i,int* gg,int* mm,int* aa)
@@ -184,6 +186,9 @@ string** BAccount::b_append(int n,string** oldarray)
 		newarray[i][1] = oldarray[i][1];
 		newarray[i][2] = oldarray[i][2];
 	}
+	
+	//memcpy(newarray,oldarray,sizeof(string[n][3]));
+	
 	delete oldarray; 
 
 	return newarray;

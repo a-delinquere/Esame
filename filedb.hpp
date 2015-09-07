@@ -15,7 +15,7 @@ public:
 	void fdb_write(string*,string*);
 	
 private:
-	void fdb_numOfLine(int*);
+	int fdb_numOfLine();
 private:
 	fstream db;
 };
