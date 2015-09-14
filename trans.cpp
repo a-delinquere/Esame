@@ -6,6 +6,16 @@ Trans::Trans(string* iban)
 	trans = fdb->fdb_query(&len,iban);
 }
 
+Trans::~Trans()
+{
+	delete fdb;
+	for (int i = 0;i < len;i++)
+	{
+		delete trans[i];
+	}
+	delete trans;
+}
+
 void Trans::t_update(string* iban,int dd,int mm,int aa,float* value,string* causal)
 {
 	stringstream convert;

@@ -16,6 +16,7 @@ class BAccount: private Trans
 {
 public:
 	BAccount(Client*,string*);
+	~BAccount();
 	void b_whitdraval(string*,string*); //prelievo
 	string** b_transaction(int*); //movimenti
 	string** b_transaction(int*,int*,int*,int*,int*,int*,int*); //movimenti intervallo

@@ -13,6 +13,7 @@ class Trans
 {
 public:
 	Trans(string*);
+	~Trans();
 	void t_init(string*);
 	void t_update(string*,int,int,int,float*,string*);
 	void t_balance(float*);

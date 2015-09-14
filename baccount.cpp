@@ -13,6 +13,13 @@ BAccount::BAccount(Client* c,string* piban) : Trans(piban)
 	now = localtime(&t);
 }
 
+BAccount::~BAccount()
+{
+	delete client;
+	delete trans;
+	delete now;
+}
+
 void BAccount::b_whitdraval(string* bankName,string* bancomat)
 {
 	float amount;
