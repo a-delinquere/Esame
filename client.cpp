@@ -1,16 +1,16 @@
 #include "client.hpp" 
 
-Client::Client(string* n,string* c,string* p)
+Client::Client(string n,string c,string p)
 {
-	name = *n;
-	surname = *c;
-	password = *p;
+	name = n;
+	surname = c;
+	password = p;
 }
 
-bool Client::c_loginTest(string* i)
+bool Client::c_loginTest(string* cc)
 {
 	FileDatabase* fdb = new FileDatabase();
-	return fdb->fdb_login(&name,&surname,&password,i);
+	return fdb->fdb_login(name,surname,password,cc);
 }
 
 string Client::c_getName()

@@ -13,8 +13,8 @@ class Client
 {
 friend class BAccount;
 public:
-	Client(string*,string*,string*);
-	bool c_loginTest(string*);
+	Client(string,string,string);
+	bool c_loginTest(string*); //controlla se l'utente è valido ritornando un booleano e se valido inizializza il valore iban
 	string c_getName();
 	string c_getSurname();
 	string c_getPassword();

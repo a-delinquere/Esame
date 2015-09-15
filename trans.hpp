@@ -2,7 +2,6 @@
 #define TRANS_H_
 
 #include <iostream>
-#include <cstdio>
 #include <sstream>
 
 #include "filedb.hpp"
@@ -12,11 +11,10 @@ using namespace std;
 class Trans
 {
 public:
-	Trans(string*);
+	Trans(string);
 	~Trans();
-	void t_init(string*);
-	void t_update(string*,int,int,int,float*,string*);
-	void t_balance(float*);
+	void t_update(int,int,int,float,string); //aggiorna le transazioni aggiungendo un elemento
+	float t_balance(); //calcola il risultato dei valori delle transazioni
 	
 protected:
 	int t_dim();
@@ -26,11 +24,9 @@ protected:
 	
 private:
 	string** trans;
+	string iban;
 	int len;
 	FileDatabase* fdb;
-	
-private:
-	int t_transLen();
 };
 
 #endif

@@ -1,14 +1,12 @@
 #include "baccount.hpp"
 
-BAccount::BAccount(Client* c,string* piban) : Trans(piban)
+BAccount::BAccount(Client* c,string cc) : Trans(cc)
 {
 
 	client = c;
-	iban = *piban;
-	balance = 0;
-
-	this->t_balance(&balance);
-
+	
+	balance = this->t_balance();
+	
 	time_t t = time(0);
 	now = localtime(&t);
 }
@@ -16,11 +14,10 @@ BAccount::BAccount(Client* c,string* piban) : Trans(piban)
 BAccount::~BAccount()
 {
 	delete client;
-	delete trans;
 	delete now;
 }
 
-void BAccount::b_whitdraval(string* bankName,string* bancomat)
+void BAccount::b_whitdraval(string bankName,string bancomat)
 {
 	float amount;
 	string causal;
@@ -42,7 +39,7 @@ void BAccount::b_whitdraval(string* bankName,string* bancomat)
 
 
 			ofstream ticket("ticket.txt");
-			ticket << *bankName << "     " << *bancomat << endl;
+			ticket << bankName << "     " << bancomat << endl;
 			ticket << causal << endl;
 			ticket << "     " << balance << "     disponibile prima del prelievo" << endl;
 			ticket << "     " << amount << "     prelievo" << endl;
@@ -52,8 +49,8 @@ void BAccount::b_whitdraval(string* bankName,string* bancomat)
 		}
 
 		amount *= -1;
-		this->t_update(&iban,now->tm_mday,now->tm_mon+1,now->tm_year+1900,&amount,&causal);
-		this->t_balance(&balance);
+		this->t_update(now->tm_mday,now->tm_mon+1,now->tm_year+1900,amount,causal);
+		balance = this->t_balance();
 	}else{
 		cout << "L'importo del prelievo non può superare il deposito" << endl;
 	}
@@ -83,7 +80,7 @@ string** BAccount::b_transaction(int* i)
 	return t;
 }
 
-string** BAccount::b_transaction(int* n,int* sdd,int* smm,int* syy,int* edd,int* emm,int* eyy)
+string** BAccount::b_transaction(int* n,int sdd,int smm,int syy,int edd,int emm,int eyy)
 {
 	string** t = 0;
 	int dd,mm,yy;
@@ -93,7 +90,7 @@ string** BAccount::b_transaction(int* n,int* sdd,int* smm,int* syy,int* edd,int*
 	for (int i = 0;i < this->t_dim();i++)
 	{
 		b_splitDate(i,&dd,&mm,&yy);
-		int daytoday = b_dayCount(sdd,smm,syy,&dd,&mm,&yy);
+		int daytoday = b_dayCount(sdd,smm,syy,dd,mm,yy);
 		
 		if (0 <= daytoday && daytoday <= daytoend)
 		{
@@ -108,7 +105,7 @@ string** BAccount::b_transaction(int* n,int* sdd,int* smm,int* syy,int* edd,int*
 	return t;
 }
 
-void  BAccount::b_telRecharge(string* bankName,string* bancomat)
+void  BAccount::b_telRecharge(string bankName,string bancomat)
 {
 	float amount;
 	string number;
@@ -127,7 +124,7 @@ void  BAccount::b_telRecharge(string* bankName,string* bancomat)
 		if (t=="s")
 		{
 			ofstream rech("recharge.txt");
-			rech << *bankName << "     " << *bancomat << endl;
+			rech << bankName << "     " << bancomat << endl;
 			rech << "     Importo ricarica : " << amount << "     " << endl;
 			rech << "     Numero di telefono : " << number << "     " << endl << endl << endl;
 			rech << "     " << "     " << now->tm_mday << "/" << now->tm_mon+1 << "/" << now->tm_year+1900;
@@ -137,43 +134,26 @@ void  BAccount::b_telRecharge(string* bankName,string* bancomat)
 		t = "Ricarica telefonica num: " + number;
 
 		amount *= -1;
-		this->t_update(&iban,now->tm_mday,now->tm_mon+1,now->tm_year+1900,&amount,&t);
+		this->t_update(now->tm_mday,now->tm_mon+1,now->tm_year+1900,amount,t);
 	}else{
 		cout << "La ricarica non può superare il deposito" << endl;
 		cout << "e l'importo deve essere maggiore di 0." << endl;
 	}
-	this->t_balance(&balance);
+	balance = this->t_balance();
 }
 
 void BAccount::b_splitDate(int i,int* gg,int* mm,int* aa)
 {
 	*gg = *mm = *aa = 0;
-
-	string sgg,smm,saa;
-	stringstream date(this->t_date(i));
-	getline(date,sgg,'/');
-	getline(date,smm,'/');
-	getline(date,saa,'\0');
-
-	stringstream converter;
-	converter << sgg;
-	converter >> *gg;
-
-	converter.clear();
-	converter << smm;
-	converter >> *mm;
-
-	converter.clear();
-	converter << saa;
-	converter >> *aa;
+	sscanf(this->t_date(i).c_str(),"%d/%d/%d",gg,mm,aa);
 }
 
-int BAccount::b_dayCount(int* igg,int* imm,int* iaa,int* gg,int* mm,int* aa)
+int BAccount::b_dayCount(int igg,int imm,int iaa,int gg,int mm,int aa)
 {
 	int day = 0;
 
-	struct tm da = {0,0,0,*igg,*imm-1,*iaa-1900};
-	struct tm a = {0,0,0,*gg,*mm-1,*aa-1900};
+	struct tm da = {0,0,0,igg,imm-1,iaa-1900};
+	struct tm a = {0,0,0,gg,mm-1,aa-1900};
 
 	time_t x = mktime(&da);
 	time_t y = mktime(&a);
@@ -192,6 +172,7 @@ string** BAccount::b_append(int n,string** oldarray)
 		newarray[i][0] = oldarray[i][0];
 		newarray[i][1] = oldarray[i][1];
 		newarray[i][2] = oldarray[i][2];
+		delete oldarray[i];
 	}
 	
 	//memcpy(newarray,oldarray,sizeof(string[n][3]));

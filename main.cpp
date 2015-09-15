@@ -17,7 +17,7 @@ int main()
 	bankName = BANKNAME;
 	bancomat = BANCOMAT_NUMBER;
 	
-	Sportello sport(&bankName,&bancomat);
+	Sportello sport(bankName,bancomat);
 	
 	return 0;
 }

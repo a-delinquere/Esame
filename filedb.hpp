@@ -10,9 +10,9 @@ using namespace std;
 class FileDatabase
 {
 public:
-	bool fdb_login(string*,string*,string*,string*);  //login control
-	string** fdb_query(int*,string*); //return all transations
-	void fdb_write(string*,string*);
+	bool fdb_login(string,string,string,string*);  //effattua il controllo su nome cognome password e se valido inizializza c/c
+	string** fdb_query(int*,string); //ritorna l'array delle trasazioni effettuate (int* modifica il numero di elementi)
+	void fdb_write(string,string); //scrive su file delle transazioni
 	
 private:
 	int fdb_numOfLine();

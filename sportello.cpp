@@ -1,9 +1,9 @@
 #include "sportello.hpp"
 
-Sportello::Sportello(string* c,string* bn)
+Sportello::Sportello(string c,string bn)
 {
-	code = *c;
-	bankname = *bn;
+	code = c;
+	bankname = bn;
 
 	string name,surname,password,cc;
 	/*cout << "inserire nome e cognome:\n";
@@ -12,11 +12,11 @@ Sportello::Sportello(string* c,string* bn)
 	cin >> password;*/
 	name = "raffaele";surname="mancino";password="password"; //comment for relese
 
-	Client* client = new Client(&name,&surname,&password);
+	Client* client = new Client(name,surname,password);
 	if (client->c_loginTest(&cc))
 	{
 		cout << "Login Effettuato" << endl;
-		BAccount* baccount = new BAccount(client,&cc);
+		BAccount* baccount = new BAccount(client,cc);
 		s_functions(baccount);
 	}else{
 		cout << "Cliente o password errati" << endl;
@@ -37,7 +37,7 @@ void Sportello::s_functions(BAccount* ba)
 	{
 		case 0:
 		{
-			ba->b_whitdraval(&bankname,&code);
+			ba->b_whitdraval(bankname,code);
 		}
 			break;
 		case 1:
@@ -45,7 +45,7 @@ void Sportello::s_functions(BAccount* ba)
 			string** t;
 			int n;
 			t = ba->b_transaction(&n);
-			s_printTransactions(&n,t);
+			s_printTransactions(n,t);
 		}
 			break;
 		case 2:
@@ -57,23 +57,23 @@ void Sportello::s_functions(BAccount* ba)
 			cin >> sday >> smonth >> syear;
 			cout << "a: ";
 			cin >> eday >> emonth >> eyear;
-			t = ba->b_transaction(&n,&sday,&smonth,&syear,&eday,&emonth,&eyear);
-			s_printTransactions(&n,t);
+			t = ba->b_transaction(&n,sday,smonth,syear,eday,emonth,eyear);
+			s_printTransactions(n,t);
 		}
 			break;
 		case 3:
 		{
 
-			ba->b_telRecharge(&bankname,&code);
+			ba->b_telRecharge(bankname,code);
 		}
 			break;
 	}
 }
 
 
-void Sportello::s_printTransactions(int* n,string** vector)
+void Sportello::s_printTransactions(int n,string** vector)
 {
-	for (int i = 0;i<*n;i++)
+	for (int i = 0;i<n;i++)
 	{
 		cout << vector[i][0] << " " << vector[i][1] << " " << vector[i][2] << endl;
 	}

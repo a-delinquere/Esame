@@ -11,11 +11,11 @@ using namespace std;
 class Sportello
 {
 public:
-	Sportello(string*,string*);
+	Sportello(string,string);
 
 private:
 	void s_functions(BAccount*);
-	void s_printTransactions(int*,string**);
+	void s_printTransactions(int,string**);
 
 private:
 	string code;
