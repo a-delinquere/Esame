@@ -5,25 +5,27 @@ Sportello::Sportello(string c,string bn)
 	code = c;
 	bankname = bn;
 
-	string name,surname,password,cc;
-	/*cout << "inserire nome e cognome:\n";
-	cin >> name >> surname;
+	string username,password,cc;
+	/*cout << "inserire username:\n";
+	cin >> username;
 	cout << "inserire password:\n";
 	cin >> password;*/
-	name = "raffaele";surname="mancino";password="password"; //comment for relese
-
-	Client* client = new Client(name,surname,password);
-	if (client->c_loginTest(&cc))
+	username="raffaelemancino";password="password"; //comment for relese
+	//Client client(username,password);
+	//Person* user = &client;
+	Client* user = new Client(username,password);
+	
+	if (user->c_loginTest(&cc))
 	{
 		cout << "Login Effettuato" << endl;
-		BAccount* baccount = new BAccount(client,cc);
+		BAccount baccount(user,cc);
 		s_functions(baccount);
 	}else{
-		cout << "Cliente o password errati" << endl;
+		cout << "Username o password errati" << endl;
 	}
 }
 
-void Sportello::s_functions(BAccount* ba)
+void Sportello::s_functions(BAccount bank)
 {
 	int ctrl;
 	cout << "Per effettuare un prelievo digitare \"0\"," << endl;
@@ -37,14 +39,14 @@ void Sportello::s_functions(BAccount* ba)
 	{
 		case 0:
 		{
-			ba->b_whitdraval(bankname,code);
+			bank.b_whitdraval(bankname,code);
 		}
 			break;
 		case 1:
 		{
 			string** t;
 			int n;
-			t = ba->b_transaction(&n);
+			t = bank.b_transaction(&n);
 			s_printTransactions(n,t);
 		}
 			break;
@@ -57,14 +59,14 @@ void Sportello::s_functions(BAccount* ba)
 			cin >> sday >> smonth >> syear;
 			cout << "a: ";
 			cin >> eday >> emonth >> eyear;
-			t = ba->b_transaction(&n,sday,smonth,syear,eday,emonth,eyear);
+			t = bank.b_transaction(&n,sday,smonth,syear,eday,emonth,eyear);
 			s_printTransactions(n,t);
 		}
 			break;
 		case 3:
 		{
 
-			ba->b_telRecharge(bankname,code);
+			bank.b_telRecharge(bankname,code);
 		}
 			break;
 	}

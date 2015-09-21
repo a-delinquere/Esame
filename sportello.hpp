@@ -5,6 +5,7 @@
 
 #include "client.hpp"
 #include "baccount.hpp"
+#include "countdown.hpp"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
 	Sportello(string,string);
 
 private:
-	void s_functions(BAccount*);
+	void s_functions(BAccount);
 	void s_printTransactions(int,string**);
 
 private:

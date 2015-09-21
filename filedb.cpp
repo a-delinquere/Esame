@@ -1,5 +1,5 @@
 #include "filedb.hpp"
-bool FileDatabase::fdb_login(string name_s,string surname_s,string password_s,string* cc_s)
+bool FileDatabase::fdb_login(string username_s,string password_s,string* name_s,string* surname_s,string* cc_s)
 {
 	db.open("bank/username.txt");
 	bool resp = false;
@@ -7,14 +7,17 @@ bool FileDatabase::fdb_login(string name_s,string surname_s,string password_s,st
 	
 	while(!db.eof())
 	{
-		string name,surname,password,cc;
+		string username,password,name,surname,cc;
+		getline(db,username,' ');
+		getline(db,password,' ');
 		getline(db,name,' ');
 		getline(db,surname,' ');
-		getline(db,password,' ');
 		getline(db,cc,'\n');
-		if (name==name_s && surname==surname_s && password==password_s)
+		if (username==username_s && password==password_s)
 		{
 			resp = true;
+			*name_s = name;
+			*surname_s = surname;
 			*cc_s = cc;
 			break;
 		}

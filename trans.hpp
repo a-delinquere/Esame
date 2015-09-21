@@ -12,9 +12,11 @@ class Trans
 {
 public:
 	Trans(string);
+	Trans(const Trans&); //costruttore di copie
 	~Trans();
 	void t_update(int,int,int,float,string); //aggiorna le transazioni aggiungendo un elemento
 	float t_balance(); //calcola il risultato dei valori delle transazioni
+	string** operator<<(const string&);
 	
 protected:
 	int t_dim();
@@ -28,5 +30,12 @@ private:
 	int len;
 	FileDatabase* fdb;
 };
+
+
+/*string** operator+ (int const& a,string const& txt)
+{
+	cout << txt << " " << a << endl;
+	return 0;
+}*/
 
 #endif

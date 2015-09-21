@@ -2,29 +2,35 @@
 
 BAccount::BAccount(Client* c,string cc) : Trans(cc)
 {
-
 	client = c;
 	
 	balance = this->t_balance();
-	
-	time_t t = time(0);
-	now = localtime(&t);
+}
+
+BAccount::BAccount(const BAccount& original) : Trans(original)
+{
+	balance = original.balance;
+	client = new Client();
+	*client = *original.client;
 }
 
 BAccount::~BAccount()
 {
-	delete client;
-	delete now;
+	
 }
 
 void BAccount::b_whitdraval(string bankName,string bancomat)
 {
 	float amount;
 	string causal;
-
+	
+	time_t t = time(0);
+	struct tm* now;
+	now = localtime(&t);
+	
 	cout << "Inserire importo: ";
 	cin >> amount;
-	cin.ignore(); //flush the newline of buffer
+	cin.ignore(); //pulisce il buffer
 	cout << "Inserire causale: ";
 	getline(cin,causal);
 
@@ -86,12 +92,10 @@ string** BAccount::b_transaction(int* n,int sdd,int smm,int syy,int edd,int emm,
 	int dd,mm,yy;
 	dd = mm = yy = *n = 0;
 	int daytoend = b_dayCount(sdd,smm,syy,edd,emm,eyy);
-
 	for (int i = 0;i < this->t_dim();i++)
 	{
 		b_splitDate(i,&dd,&mm,&yy);
 		int daytoday = b_dayCount(sdd,smm,syy,dd,mm,yy);
-		
 		if (0 <= daytoday && daytoday <= daytoend)
 		{
 			t = b_append(*n,t);
@@ -109,18 +113,22 @@ void  BAccount::b_telRecharge(string bankName,string bancomat)
 {
 	float amount;
 	string number;
-
+	
+	time_t t = time(0);
+	struct tm* now;
+	now = localtime(&t);
+	
 	cout << "Importo: ";
 	cin >> amount;
 	cout << "Numero di telefono: ";
 	cin >> number;
-
+	
 	if (amount <= balance && amount > 0)
 	{
 		string t;
 		cout << "Stampare scontrino? [s/n]: ";
 		cin >> t;
-
+		
 		if (t=="s")
 		{
 			ofstream rech("recharge.txt");
@@ -130,9 +138,9 @@ void  BAccount::b_telRecharge(string bankName,string bancomat)
 			rech << "     " << "     " << now->tm_mday << "/" << now->tm_mon+1 << "/" << now->tm_year+1900;
 			rech.close();
 		}
-
+		
 		t = "Ricarica telefonica num: " + number;
-
+		
 		amount *= -1;
 		this->t_update(now->tm_mday,now->tm_mon+1,now->tm_year+1900,amount,t);
 	}else{
@@ -169,15 +177,8 @@ string** BAccount::b_append(int n,string** oldarray)
 	for (int i = 0;i < n; i++)
 	{
 		newarray[i] = new string[3];
-		newarray[i][0] = oldarray[i][0];
-		newarray[i][1] = oldarray[i][1];
-		newarray[i][2] = oldarray[i][2];
-		delete oldarray[i];
+		memcpy(newarray[i],oldarray[i],sizeof(string)*3);
 	}
-	
-	//memcpy(newarray,oldarray,sizeof(string[n][3]));
-	
-	delete oldarray; 
-
+	delete[] oldarray;
 	return newarray;
 }

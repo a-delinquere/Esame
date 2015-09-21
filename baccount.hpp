@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <ctime>
 
 #include "trans.hpp"
 
-class Client; //delcaration as incomplete type
+class Client;
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class BAccount: virtual private Trans
 {
 public:
 	BAccount(Client*,string);
+	BAccount(const BAccount&); //costruttore di copie
 	~BAccount();
 	void b_whitdraval(string,string); //prelievo
 	string** b_transaction(int*); //movimenti
@@ -30,9 +32,8 @@ private:
 	Client* client;
 	float balance;
 	string iban;
-	struct tm* now;
 };
 
-#include "client.hpp" //define Client type
+#include "client.hpp"
 
 #endif
